@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDuckModal from "@/components/AddDuckModal";
+import { NewDuck } from "@/types/duck";
 
 
 export default function Home() {
@@ -19,10 +20,18 @@ export default function Home() {
   const handleEditDuck = (id:number) => { 
     console.log(`Editando Pato ${id}`);
   }
+
   const handleDeleteDuck = (id:number) => { 
     setDucks(prev => 
       prev.filter(duck => duck.id !== id).sort((a,b) => b.stock - a.stock)
     )
+  }
+
+  const handleSubmitDuck = (newDuck: NewDuck) => {
+    const newId = ducks.length ? Math.max(...ducks.map(d => d.id)) + 1 : 1;
+    setDucks(prev => 
+    [...prev, { ...newDuck, id: newId }].sort((a, b) => b.stock - a.stock)
+    );
   }
 
 
@@ -38,7 +47,7 @@ export default function Home() {
       <AddDuckModal 
         open={isAddDuckModalOpen}
         onClose={() => setIsAddDuckModalOpen(false)}
-        onSubmit={() => { console.log("agregando patos")}}
+        onSubmit={handleSubmitDuck}
       />
 
       <Table>

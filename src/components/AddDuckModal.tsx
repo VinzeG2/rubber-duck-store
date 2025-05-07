@@ -1,19 +1,13 @@
 'use client'
 
+import { NewDuck } from "@/types/duck"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material"
 import { useState } from "react"
 
 type AddDuckModalProps = {
     open: boolean
     onClose: () => void
-    onSubmit: (
-        duck: {
-            color: string,
-            size: string,
-            price: number,
-            stock: number
-        }
-    ) => void
+    onSubmit: (newDuck: NewDuck) => void
 }
 
 function AddDuckModal({ open, onClose, onSubmit }: Readonly<AddDuckModalProps>) {

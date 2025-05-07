@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDuckModal from "@/components/AddDuckModal";
 import { NewDuck } from "@/types/duck";
+import { findDuplicateDuck } from "@/utils/ducks";
 
 
 export default function Home() {
@@ -28,10 +29,23 @@ export default function Home() {
   }
 
   const handleSubmitDuck = (newDuck: NewDuck) => {
-    const newId = ducks.length ? Math.max(...ducks.map(d => d.id)) + 1 : 1;
-    setDucks(prev => 
-    [...prev, { ...newDuck, id: newId }].sort((a, b) => b.stock - a.stock)
-    );
+
+    const alreadyExists = findDuplicateDuck(ducks, newDuck);
+
+    if (alreadyExists) {
+      setDucks(prev => 
+        prev.map(d => 
+          d.id === alreadyExists.id
+            ? { ...d, stock: d.stock + newDuck.stock }
+            : d
+        ).sort((a, b) => b.stock - a.stock)
+      )
+    } else {
+      const newId = ducks.length ? Math.max(...ducks.map(d => d.id)) + 1 : 1;
+      setDucks(prev => 
+      [...prev, { ...newDuck, id: newId }].sort((a, b) => b.stock - a.stock)
+      );
+    }
   }
 
 

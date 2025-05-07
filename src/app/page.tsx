@@ -1,8 +1,11 @@
 'use client'
 
 import { mockDucks } from "@/data/ducks";
-import { Button, Container, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Container, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useState } from "react";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 export default function Home() {
 
@@ -10,7 +13,14 @@ export default function Home() {
 
   const handleAddDuck = () => { 
     console.log("Agregando Pato");
-   }
+  }
+  const handleEditDuck = (id:number) => { 
+    console.log(`Editando Pato ${id}`);
+  }
+  const handleDeleteDuck = (id:number) => { 
+    console.log(`Eliminando Pato ${id}`);
+  }
+
 
   return (
     <Container maxWidth="sm">
@@ -40,7 +50,14 @@ export default function Home() {
               <TableCell>{duck.size}</TableCell>
               <TableCell>{duck.price}</TableCell>
               <TableCell>{duck.stock}</TableCell>
-              <TableCell>Acciones</TableCell>
+              <TableCell>
+                <IconButton color="primary" onClick={() => handleEditDuck(duck.id)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton color="warning" onClick={() => handleDeleteDuck(duck.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -2,7 +2,7 @@
 
 import { mockDucks } from "@/data/ducks";
 import { Button, Container, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDuckModal from "@/components/AddDuckModal";
@@ -15,6 +15,17 @@ export default function Home() {
   const getSortedDucks = useMemo(() => [...mockDucks].sort((a, b) => b.stock - a.stock),[]) 
   const [ducks, setDucks] = useState(getSortedDucks);
   const [isAddDuckModalOpen, setIsAddDuckModalOpen] = useState(false)
+
+  const fetchDucks = async () => {
+    const res = await fetch("http://localhost:4000/ducks")
+    const data = await res.json()
+    console.log(data);
+  }
+
+  useEffect(() => {
+    fetchDucks()
+  }, [])
+  
 
   const handleAddDuck = () => setIsAddDuckModalOpen(true);
 

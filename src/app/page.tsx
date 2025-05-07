@@ -2,14 +2,15 @@
 
 import { mockDucks } from "@/data/ducks";
 import { Button, Container, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export default function Home() {
 
-  const [ducks, setDucks] = useState(mockDucks);
+  const getSortedDucks = useMemo(() => [...mockDucks].sort((a, b) => b.stock - a.stock),[]) 
+  const [ducks, setDucks] = useState(getSortedDucks);
 
   const handleAddDuck = () => { 
     console.log("Agregando Pato");

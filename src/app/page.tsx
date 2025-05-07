@@ -19,7 +19,9 @@ export default function Home() {
     console.log(`Editando Pato ${id}`);
   }
   const handleDeleteDuck = (id:number) => { 
-    console.log(`Eliminando Pato ${id}`);
+    setDucks(prev => 
+      prev.filter(duck => duck.id !== id).sort((a,b) => b.stock - a.stock)
+    )
   }
 
 

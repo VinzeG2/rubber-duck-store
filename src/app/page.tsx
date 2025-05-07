@@ -5,16 +5,17 @@ import { Button, Container, IconButton, Table, TableBody, TableCell, TableHead, 
 import { useMemo, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddDuckModal from "@/components/AddDuckModal";
 
 
 export default function Home() {
 
   const getSortedDucks = useMemo(() => [...mockDucks].sort((a, b) => b.stock - a.stock),[]) 
   const [ducks, setDucks] = useState(getSortedDucks);
+  const [isAddDuckModalOpen, setIsAddDuckModalOpen] = useState(false)
 
-  const handleAddDuck = () => { 
-    console.log("Agregando Pato");
-  }
+  const handleAddDuck = () => setIsAddDuckModalOpen(true);
+
   const handleEditDuck = (id:number) => { 
     console.log(`Editando Pato ${id}`);
   }
@@ -33,6 +34,12 @@ export default function Home() {
       <Button variant="contained" color="secondary" onClick={handleAddDuck}>
         Agregar Pato
       </Button>
+
+      <AddDuckModal 
+        open={isAddDuckModalOpen}
+        onClose={() => setIsAddDuckModalOpen(false)}
+        onSubmit={() => { console.log("agregando patos")}}
+      />
 
       <Table>
         <TableHead>

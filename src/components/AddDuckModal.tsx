@@ -1,21 +1,37 @@
 'use client'
 
-import { NewDuck } from "@/types/duck"
+import { Duck, NewDuck } from "@/types/duck"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type AddDuckModalProps = {
     open: boolean
     onClose: () => void
     onSubmit: (newDuck: NewDuck) => void
+    initialData?: NewDuck | Duck;
+    isEdit?: boolean;
 }
 
-function AddDuckModal({ open, onClose, onSubmit }: Readonly<AddDuckModalProps>) {
+function AddDuckModal({ open, onClose, onSubmit, initialData, isEdit }: Readonly<AddDuckModalProps>) {
 
   const [color, setColor] = useState("")
   const [size, setSize] = useState("")
   const [price, setPrice] = useState("")
   const [stock, setStock] = useState("")
+
+  useEffect(() => {
+    if (initialData) {
+      setColor(initialData.color);
+      setSize(initialData.size);
+      setPrice(String(initialData.price));
+      setStock(String(initialData.stock));
+    } else {
+      setColor("");
+      setSize("");
+      setPrice("");
+      setStock("");
+    }
+  }, [initialData, open]);
 
   const handleSubmit = () => {
     if (!color || !size || !price || !stock) return

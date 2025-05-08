@@ -1,5 +1,4 @@
 export const mockDucks = [
-    { id: 1, color: "Amarillo", size: "Xlarge", price: 5.99, stock: 10000 },
-    { id: 2, color: "Rojo", size: "Xlarge", price: 6.99, stock: 5000 },
-    { id: 3, color: "Verde", size: "Xlarge", price: 6.99, stock: 99000 },
+    { _id: "681bf85cf94348c4651f1241", id: 1, color: "Amarillo", size: "Xlarge", price: 5.99, stock: 10000, deleted: false },
+    { _id: "681bf85cf94348c4651f1241", id: 2, color: "Rojo", size: "Xlarge", price: 8.99, stock: 10000, deleted: false },
 ]

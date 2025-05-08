@@ -46,4 +46,24 @@ router.delete("/:id", async (req, res) => {
   res.status(204).end();
 })
 
+router.put("/:id", async (req, res) => {
+  const { price, stock } = req.body;
+
+  if (price == null || stock == null) {
+    return res.status(400).json({ error: "Missing fields" });
+  }
+
+  const duck = await Duck.findOne({ id: Number(req.params.id), deleted: false });
+  if (!duck) {
+    return res.status(404).json({ error: "Duck not found" });
+  }
+
+  duck.price = price;
+  duck.stock = stock;
+
+  await duck.save();
+  res.status(200).json(duck);
+});
+
+
 module.exports = router;

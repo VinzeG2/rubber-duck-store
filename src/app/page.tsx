@@ -6,14 +6,18 @@ import { useEffect, useMemo, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDuckModal from "@/components/AddDuckModal";
-import { NewDuck } from "@/types/duck";
+import { Duck, NewDuck } from "@/types/duck";
 
 
 export default function Home() {
 
   const getSortedDucks = useMemo(() => [...mockDucks].sort((a, b) => b.stock - a.stock),[]) 
   const [ducks, setDucks] = useState(getSortedDucks);
-  const [isAddDuckModalOpen, setIsAddDuckModalOpen] = useState(false)
+  const [modalData, setModalData] = useState<NewDuck | Duck | null>(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+
 
   const fetchDucks = async () => {
     const res = await fetch("http://localhost:4000/ducks")
@@ -27,10 +31,19 @@ export default function Home() {
   }, [])
   
 
-  const handleAddDuck = () => setIsAddDuckModalOpen(true);
+  const handleAddDuck = () => {
+    setModalData(null);
+    setIsEdit(false);
+    setIsModalOpen(true);
+  }
 
   const handleEditDuck = (id:number) => { 
-    console.log(`Editando Pato ${id}`);
+    const duck = ducks.find(d => d.id === id)
+    if (duck) {
+      setModalData(duck);
+      setIsEdit(true);
+      setIsModalOpen(true);
+    }
   }
 
   const handleDeleteDuck = async (id:number) => { 
@@ -51,11 +64,21 @@ export default function Home() {
   const handleSubmitDuck = async (newDuck: NewDuck) => {
     console.log({newDuck});
     
-    await fetch("http://localhost:4000/ducks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newDuck)
-    })
+    if (isEdit && modalData && 'id' in modalData) {
+      await fetch(`http://localhost:4000/ducks/${modalData.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newDuck),
+      });
+    } else {
+      await fetch("http://localhost:4000/ducks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newDuck)
+      })
+    }
+    setModalData(null)
+    setIsModalOpen(false);
     fetchDucks()
   }
 
@@ -70,9 +93,11 @@ export default function Home() {
       </Button>
 
       <AddDuckModal 
-        open={isAddDuckModalOpen}
-        onClose={() => setIsAddDuckModalOpen(false)}
+        open={modalData !== null || !isEdit && isModalOpen}
+        onClose={() => {setModalData(null);setIsModalOpen(false);}}
         onSubmit={handleSubmitDuck}
+        initialData={modalData ?? undefined}
+        isEdit={isEdit}
       />
 
       <Table>

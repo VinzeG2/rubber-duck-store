@@ -8,5 +8,5 @@ export type Duck = {
     deleted: boolean;
   }
   
-export type NewDuck = Omit<Duck, "id">;
+export type NewDuck = Omit<Duck, "_id" | "id" | "deleted">;
   

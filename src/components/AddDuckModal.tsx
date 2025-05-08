@@ -1,7 +1,7 @@
 'use client'
 
 import { Duck, NewDuck } from "@/types/duck"
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material"
 import { useEffect, useState } from "react"
 
 type AddDuckModalProps = {
@@ -15,7 +15,7 @@ type AddDuckModalProps = {
 function AddDuckModal({ open, onClose, onSubmit, initialData, isEdit }: Readonly<AddDuckModalProps>) {
 
   const [color, setColor] = useState("")
-  const [size, setSize] = useState("")
+  const [size, setSize] = useState("Small")
   const [price, setPrice] = useState("")
   const [stock, setStock] = useState("")
 
@@ -27,7 +27,7 @@ function AddDuckModal({ open, onClose, onSubmit, initialData, isEdit }: Readonly
       setStock(String(initialData.stock));
     } else {
       setColor("");
-      setSize("");
+      setSize("Small");
       setPrice("");
       setStock("");
     }
@@ -53,8 +53,25 @@ function AddDuckModal({ open, onClose, onSubmit, initialData, isEdit }: Readonly
         <DialogTitle>Agregar nuevo Patito</DialogTitle>
         <DialogContent>
             <Stack spacing={2} mt={1}>
-                <TextField label="Color" value={color} onChange={e => setColor(e.target.value)} />
-                <TextField label="Tamaño" value={size} onChange={e => setSize(e.target.value)} />
+                <FormControl fullWidth>
+                  <InputLabel id="color-label">Color</InputLabel>
+                  <Select labelId="color-label" label="Color" value={color} onChange={e => setColor(e.target.value)}  >
+                    <MenuItem value={"Rojo"}>Rojo</MenuItem>
+                    <MenuItem value={"Verde"}>Verde</MenuItem>
+                    <MenuItem value={"Amarillo"}>Amarillo</MenuItem>
+                    <MenuItem value={"Negro"}>Negro</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="size-label">Tamaño</InputLabel>
+                  <Select labelId="size-label" label="Tamaño" value={size} onChange={e => setSize(e.target.value)} >
+                    <MenuItem value={"xlarge"}>XLarge</MenuItem>
+                    <MenuItem value={"large"}>Large</MenuItem>
+                    <MenuItem value={"medium"}>Medium</MenuItem>
+                    <MenuItem value={"small"}>Small</MenuItem>
+                    <MenuItem value={"xsmall"}>XSmall</MenuItem>
+                  </Select>
+                </FormControl>
                 <TextField label="Precio" value={price} onChange={e => setPrice(e.target.value)} />
                 <TextField label="Cantidad" value={stock} onChange={e => setStock(e.target.value)} />
             </Stack>

@@ -3,11 +3,13 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 require("dotenv").config();
 const duckRoutes = require("./routes/ducks")
+const orderRoutes = require("./routes/orders")
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 app.use("/ducks", duckRoutes)
+app.use("/orders", orderRoutes)
 
 console.log("MONGODB_URI:", process.env.MONGODB_URI);
 

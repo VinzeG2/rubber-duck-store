@@ -25,11 +25,25 @@ router.post("/", async (req, res) => {
   }
 
   const lastCreatedDuck = await Duck.findOne().sort({ id: -1 });
-  const newId = lastCreatedDuck?.id ? lastCreatedDuck + 1 : 1;
+  const newId = lastCreatedDuck?.id ? lastCreatedDuck.id + 1 : 1;
 
   const newDuck = new Duck({ id: newId, color, size, price, stock });
   await newDuck.save();
   res.status(201).json(newDuck);
 });
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params
+  const duck = await Duck.findOne({ id: Number(id) });
+
+  if (!duck) {
+    return res.status(404).json({ error: "Duck not found" });
+  }
+
+  duck.deleted = true
+  await duck.save();
+
+  res.status(204).end();
+})
 
 module.exports = router;

@@ -33,10 +33,19 @@ export default function Home() {
     console.log(`Editando Pato ${id}`);
   }
 
-  const handleDeleteDuck = (id:number) => { 
+  const handleDeleteDuck = async (id:number) => { 
     setDucks(prev => 
       prev.filter(duck => duck.id !== id).sort((a,b) => b.stock - a.stock)
     )
+
+    try {
+      await fetch(`http://localhost:4000/ducks/${id}`, {
+        method: "DELETE",
+      })
+    } catch (error) {
+      console.error("Failed to delete duck", error);
+    }
+   
   }
 
   const handleSubmitDuck = async (newDuck: NewDuck) => {

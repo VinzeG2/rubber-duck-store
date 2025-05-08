@@ -7,7 +7,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDuckModal from "@/components/AddDuckModal";
 import { NewDuck } from "@/types/duck";
-import { findDuplicateDuck } from "@/utils/ducks";
 
 
 export default function Home() {
@@ -20,6 +19,7 @@ export default function Home() {
     const res = await fetch("http://localhost:4000/ducks")
     const data = await res.json()
     console.log(data);
+    setDucks(data.sort((a: { stock: number; }, b: { stock: number; }) => b.stock - a.stock));
   }
 
   useEffect(() => {
@@ -39,24 +39,15 @@ export default function Home() {
     )
   }
 
-  const handleSubmitDuck = (newDuck: NewDuck) => {
-
-    const alreadyExists = findDuplicateDuck(ducks, newDuck);
-
-    if (alreadyExists) {
-      setDucks(prev => 
-        prev.map(d => 
-          d.id === alreadyExists.id
-            ? { ...d, stock: d.stock + newDuck.stock }
-            : d
-        ).sort((a, b) => b.stock - a.stock)
-      )
-    } else {
-      const newId = ducks.length ? Math.max(...ducks.map(d => d.id)) + 1 : 1;
-      setDucks(prev => 
-      [...prev, { ...newDuck, id: newId }].sort((a, b) => b.stock - a.stock)
-      );
-    }
+  const handleSubmitDuck = async (newDuck: NewDuck) => {
+    console.log({newDuck});
+    
+    await fetch("http://localhost:4000/ducks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newDuck)
+    })
+    fetchDucks()
   }
 
 

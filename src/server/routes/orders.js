@@ -1,17 +1,21 @@
 const express = require("express")
 const Order = require("../models/order")
 const Duck = require("../models/duck")
+const { getPackageType, getFillingType } = require("../services/packaging")
 
 const router = express.Router()
 
 router.post("/", async (req, res) => {
     const { color, size, quantity, country, deliveryMode } = req.body
 
+    const packageType = getPackageType(size);
+    const fillingType = getFillingType(packageType, deliveryMode)
+
     if (!color || !size || !quantity || !country || !deliveryMode) {
         return res.status(400).json({ error: "Missing fields" })
     }
 
-    const duck = await Duck.findOne({ color, size })
+    const duck = await Duck.findOne({ color, size, deleted: false })
     
     if (!duck) {
         return res.status(404).json({ error: "Duck not found" })
@@ -28,7 +32,9 @@ router.post("/", async (req, res) => {
         duck: duck._id,
         quantity,
         country,
-        deliveryMode
+        deliveryMode,
+        package: getPackageType,
+        filling: fillingType,
     })
 
     await order.save();

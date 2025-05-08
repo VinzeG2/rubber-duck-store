@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     duck.stock -= quantity
     await duck.save()
 
-    const totalPrice = calculateTotal({
+    const pricing = calculateTotal({
         quantity,
         unitPrice: duck.price,
         packageType,
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
         deliveryMode
     })
 
-    console.log(totalPrice);
+    console.log(pricing);
 
     const order = new Order({
         duck: duck._id,
@@ -46,7 +46,8 @@ router.post("/", async (req, res) => {
         deliveryMode,
         package: packageType,
         filling: fillingType,
-        totalPrice: totalPrice
+        totalPrice: pricing.finalTotal,
+        detailedPrice: pricing
     })
 
     await order.save();

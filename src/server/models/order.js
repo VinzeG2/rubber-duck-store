@@ -12,6 +12,15 @@ const orderSchema = new mongoose.Schema({
     package: { type: String, required: true },
     filling: { type: String, required: true },
     totalPrice: { type: Number, required: true },
+    detailedPrice: {
+        basePrice: { type: Number, required: true },
+        bulkDiscount: { type: Number, required: true },
+        packagingAdjustment: { type: Number, required: true },
+        countryTax: { type: Number, required: true },
+        deliveryFee: { type: Number, required: true },
+        finalTotal: { type: Number, required: true }
+    }
+      
 }, {
   timestamps: true
 })

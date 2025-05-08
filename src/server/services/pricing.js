@@ -37,12 +37,26 @@ function deliveryFee(deliveryMode, quantity) {
 
 
 function calculateTotal({ quantity, unitPrice, packageType, country, deliveryMode }) {
-    let price = basePrice(quantity, unitPrice)
-    price = bulkDiscount(price, quantity)
-    price = packagingAdjustment(price, packageType)
-    price = countryTax(price, country)
+    let base = basePrice(quantity, unitPrice)
+    
+    const discount = bulkDiscount(base, quantity)
+    const adjustedBase = base - discount;
+
+    const packaging = packagingAdjustment(base, packageType)
+
+    const tax = countryTax(base, country)
     const delivery = deliveryFee(deliveryMode, quantity)
-    return price + delivery
+
+    const finalTotal = adjustedBase + packaging + tax + delivery
+
+    return {
+        basePrice: base,
+        bulkDiscount: discount,
+        packagingAdjustment: packaging,
+        countryTax: tax,
+        deliveryFee: delivery,
+        finalTotal
+    }
 }
 
 module.exports = {

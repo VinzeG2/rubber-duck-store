@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
         quantity,
         country,
         deliveryMode,
-        package: getPackageType,
+        package: packageType,
         filling: fillingType,
     })
 

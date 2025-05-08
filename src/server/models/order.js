@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema({
     },
     package: { type: String, required: true },
     filling: { type: String, required: true },
+    totalPrice: { type: Number, required: true },
 }, {
   timestamps: true
 })

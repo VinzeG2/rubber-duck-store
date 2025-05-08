@@ -2,6 +2,7 @@ const express = require("express")
 const Order = require("../models/order")
 const Duck = require("../models/duck")
 const { getPackageType, getFillingType } = require("../services/packaging")
+const { calculateTotal } = require("../services/pricing")
 
 const router = express.Router()
 
@@ -28,6 +29,16 @@ router.post("/", async (req, res) => {
     duck.stock -= quantity
     await duck.save()
 
+    const totalPrice = calculateTotal({
+        quantity,
+        unitPrice: duck.price,
+        packageType,
+        country,
+        deliveryMode
+    })
+
+    console.log(totalPrice);
+
     const order = new Order({
         duck: duck._id,
         quantity,
@@ -35,6 +46,7 @@ router.post("/", async (req, res) => {
         deliveryMode,
         package: packageType,
         filling: fillingType,
+        totalPrice: totalPrice
     })
 
     await order.save();
